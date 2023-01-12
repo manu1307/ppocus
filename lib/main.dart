@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:ppocus/screens/home_screen.dart';
 import 'package:ppocus/screens/record_screen.dart';
 import 'package:ppocus/screens/settings_screen.dart';
@@ -15,7 +16,9 @@ class Controller extends GetxController {
   increment(int number) => count + number;
 }
 
-void main() {
+void main() async {
+  await Hive.initFlutter();
+  await Hive.openBox("timeRecord_box");
   runApp(const App());
 }
 

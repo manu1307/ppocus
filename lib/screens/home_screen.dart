@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:ppocus/main.dart';
 import 'package:vibration/vibration.dart';
 import 'package:wakelock/wakelock.dart';
@@ -15,6 +16,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final Controller homeController = Get.put(Controller());
+  final myBox = Hive.box("timeRecord_box");
 
   late int workTimeNum;
   late int breakTimeNum;
@@ -44,6 +46,20 @@ class _HomeScreenState extends State<HomeScreen> {
     breakTime = breakTimeNum;
     remindTime = homeController.remindTime.toInt();
     autoStart = homeController.autoStart;
+
+    // var todayDate = DateTime(2023, 1, 12);
+    // var testDate = DateTime(2023, 1, 9);
+    // print(todayDate.day);
+    // print(todayDate.month);
+    // print(todayDate.year);
+    // print(todayDate.add(const Duration(hours: 24)));
+    // print(todayDate.add(const Duration(hours: 36)));
+
+    // myBox.put("daily", {});
+    // myBox.put("test2", "WTF");
+    // print(myBox.get("test"));
+    // myBox.put("test", "data changed");
+    // print(myBox.get("test"));
     super.initState();
   }
 
@@ -159,6 +175,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
+    timer.cancel();
     super.dispose();
   }
 
