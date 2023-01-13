@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:ppocus/main.dart';
+import 'package:ppocus/utils/check_today_funtcion.dart';
+import 'package:ppocus/utils/date_function.dart';
 import 'package:vibration/vibration.dart';
 import 'package:wakelock/wakelock.dart';
 
@@ -16,51 +18,100 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final Controller homeController = Get.put(Controller());
-  final myBox = Hive.box("timeRecord_box");
+  final myBox = Hive.box("timeRecord_test_box");
 
   late int workTimeNum;
   late int breakTimeNum;
 
   late int workingTime;
   late int breakTime;
-  int totalPomodoro = 0;
+  late int totalPpoCount = 0;
+  late int totalPpoTime = 0;
   late int remindTime;
-  bool remindTimeOn = true;
+  bool isReminding = false;
+  bool isRemindTimerOn = true;
   bool isWorking = false;
   bool isTakingBreak = false;
-  bool remind = false;
   bool isTimerRunning = false;
-//   테스트 중
+
   late bool autoStart;
 
   late Timer timer;
+  Map<String, dynamic> proccessedDate = dateProcess(DateTime.now());
 
   @override
   void initState() {
     Wakelock.toggle(enable: homeController.wakeLockEnable);
-    // workTimeNum = 2;
-    // breakTimeNum = 3;
-    workTimeNum = homeController.workTime.toInt() * 60;
-    breakTimeNum = homeController.breakTime.toInt() * 60;
-    workingTime = workTimeNum;
-    breakTime = breakTimeNum;
-    remindTime = homeController.remindTime.toInt();
-    autoStart = homeController.autoStart;
 
-    // var todayDate = DateTime(2023, 1, 12);
-    // var testDate = DateTime(2023, 1, 9);
-    // print(todayDate.day);
-    // print(todayDate.month);
-    // print(todayDate.year);
-    // print(todayDate.add(const Duration(hours: 24)));
-    // print(todayDate.add(const Duration(hours: 36)));
+    List localPpocusData = myBox.get("Daily")["data"];
+    print("iniState start");
 
-    // myBox.put("daily", {});
-    // myBox.put("test2", "WTF");
-    // print(myBox.get("test"));
-    // myBox.put("test", "data changed");
-    // print(myBox.get("test"));
+    if (!checkToday(localPpocusData[0]["year"], localPpocusData[0]["month"],
+        localPpocusData[0]["day"])) {
+      print("date changed");
+      myBox.put("Daily", {
+        "data": [
+          ...localPpocusData,
+          {
+            "year": proccessedDate["year"],
+            "month": proccessedDate["month"],
+            "day": proccessedDate["day"],
+            "date": proccessedDate["date"],
+            "totalPpoCount": 0,
+            "totalPpoTime": 0,
+          },
+        ]
+      });
+    } else {
+      print("date not changed");
+
+      workTimeNum = 2;
+      breakTimeNum = 3;
+      // workTimeNum = homeController.workTime.toInt() * 60;
+      // breakTimeNum = homeController.breakTime.toInt() * 60;
+      workingTime = workTimeNum;
+      breakTime = breakTimeNum;
+      remindTime = homeController.remindTime.toInt();
+      autoStart = homeController.autoStart;
+      totalPpoCount = localPpocusData[0]["totalPpoCount"] ?? 0;
+      totalPpoTime = localPpocusData[0]["totalPpoTime"] ?? 0;
+      timer = Timer(const Duration(seconds: 0), () {});
+
+      // print(todayDate.difference(DateTime(2023, 1, 3)).inDays);
+
+      // myBox.put("Daily", {
+      //   "data": [
+      //     {
+      //       "year": proccessedDate["year"],
+      //       "month": proccessedDate["month"],
+      //       "day": proccessedDate["day"],
+      //       "date": proccessedDate["date"],
+      //       "totalPpoCount": totalPpoCount,
+      //       "totalPpoTime": totalPpoTime
+      //     },
+      //   ]
+      // });
+
+      // print(myBox.get("Daily")["data"]);
+    }
+
     super.initState();
+  }
+
+  void updateDailyData(int totalPpoCount, int totalPpoTime) {
+    myBox.put("Daily", {
+      "data": [
+        {
+          "year": proccessedDate["year"],
+          "month": proccessedDate["month"],
+          "day": proccessedDate["day"],
+          "date": proccessedDate["date"],
+          "totalPpoCount": totalPpoCount,
+          "totalPpoTime": totalPpoTime
+        },
+      ]
+    });
+    print(myBox.get("Daily")['data']);
   }
 
   String formatTime(int time) {
@@ -74,7 +125,9 @@ class _HomeScreenState extends State<HomeScreen> {
   void onTickWorkingTimer(Timer timer) {
     if (workingTime == 0) {
       if (isWorking) {
-        totalPomodoro = totalPomodoro + 1;
+        totalPpoCount = totalPpoCount + 1;
+        totalPpoTime = totalPpoTime + workTimeNum;
+        updateDailyData(totalPpoCount, totalPpoTime);
       }
       setState(() {
         breakTime = breakTimeNum;
@@ -94,11 +147,11 @@ class _HomeScreenState extends State<HomeScreen> {
         workingTime = workingTime - 1;
       });
     }
-    if (workingTime == remindTime * 60 && remindTimeOn) {
-      remind = true;
+    if (workingTime == remindTime * 60 && isRemindTimerOn) {
+      isReminding = true;
       Vibration.vibrate(duration: 750);
       Timer(const Duration(seconds: 5), () {
-        remind = false;
+        isReminding = false;
       });
     }
   }
@@ -169,7 +222,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void toggleRemindTime(bool value) {
     setState(() {
-      remindTimeOn = value;
+      isRemindTimerOn = value;
     });
   }
 
@@ -191,7 +244,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 : const Text(
                     "집중 시간",
                   ),
-            if (remind && isWorking)
+            if (isReminding && isWorking)
               Center(
                 child: Text("$remindTime 분 남았습니다.\n 좀만 더 힘내세요!!"),
               ),
@@ -231,14 +284,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   )
               ],
             ),
-            Text('오늘 $totalPomodoro 뽀 완료'),
+            Text('오늘 $totalPpoCount 뽀 완료'),
             if (remindTime != 0)
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text("$remindTime 분전 알림"),
                   Switch(
-                    value: remindTimeOn,
+                    value: isRemindTimerOn,
                     onChanged: toggleRemindTime,
                     inactiveThumbColor: const Color.fromARGB(255, 255, 76, 63),
                     activeColor: Colors.green,

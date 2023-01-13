@@ -18,7 +18,8 @@ class Controller extends GetxController {
 
 void main() async {
   await Hive.initFlutter();
-  await Hive.openBox("timeRecord_box");
+  await Hive.openBox("timeRecord_test_box");
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const App());
 }
 
