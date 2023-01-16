@@ -13,7 +13,6 @@ class Controller extends GetxController {
   var remindTime = 5.obs;
   var autoStart = false;
   var wakeLockEnable = false;
-  increment(int number) => count + number;
 }
 
 void main() async {

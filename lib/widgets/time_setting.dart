@@ -95,7 +95,7 @@ class _TimeSettingState extends State<TimeSetting> {
                     value: timeController.remindTime.toDouble(),
                     min: 0,
                     max: 30,
-                    divisions: 3,
+                    divisions: 6,
                     onChanged: (value) {
                       setState(() {
                         _remindTimeSliderValue = value;

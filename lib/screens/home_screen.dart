@@ -23,10 +23,10 @@ class _HomeScreenState extends State<HomeScreen> {
   late int workTimeNum;
   late int breakTimeNum;
 
-  late int workingTime;
+  late int workTime;
   late int breakTime;
-  late int totalPpoCount = 0;
-  late int totalPpoTime = 0;
+  late int totalPpoCount;
+  late int totalPpoTime;
   late int remindTime;
   bool isReminding = false;
   bool isRemindTimerOn = true;
@@ -36,18 +36,57 @@ class _HomeScreenState extends State<HomeScreen> {
 
   late bool autoStart;
 
-  late Timer timer;
+  late Timer timer = Timer(const Duration(minutes: 0), () {});
   Map<String, dynamic> proccessedDate = dateProcess(DateTime.now());
 
   @override
   void initState() {
     Wakelock.toggle(enable: homeController.wakeLockEnable);
 
-    List localPpocusData = myBox.get("Daily")["data"];
-    print("iniState start");
+    myBox.put("Daily", {
+      "data": [
+        {
+          "year": 2023,
+          "month": 1,
+          "day": 13,
+          "date": DateTime(2023, 1, 13),
+          "totalPpoCount": 3,
+          "totalPpoTime": 180,
+        },
+        {
+          "year": 2023,
+          "month": 1,
+          "day": 14,
+          "date": DateTime(2023, 1, 14),
+          "totalPpoCount": 5,
+          "totalPpoTime": 155,
+        },
+        {
+          "year": 2023,
+          "month": 1,
+          "day": 15,
+          "date": DateTime(2023, 1, 15),
+          "totalPpoCount": 4,
+          "totalPpoTime": 210,
+        },
+        {
+          "year": 2023,
+          "month": 1,
+          "day": 16,
+          "date": DateTime(2023, 1, 16),
+          "totalPpoCount": 8,
+          "totalPpoTime": 220,
+        },
+      ]
+    });
 
-    if (!checkToday(localPpocusData[0]["year"], localPpocusData[0]["month"],
-        localPpocusData[0]["day"])) {
+    List localPpocusData = myBox.get("Daily")["data"];
+
+    int lastIndex = localPpocusData.length - 1;
+    if (!checkToday(
+        localPpocusData[lastIndex]["year"],
+        localPpocusData[lastIndex]["month"],
+        localPpocusData[lastIndex]["day"])) {
       print("date changed");
       myBox.put("Daily", {
         "data": [
@@ -62,38 +101,19 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         ]
       });
-    } else {
-      print("date not changed");
-
-      workTimeNum = 2;
-      breakTimeNum = 3;
-      // workTimeNum = homeController.workTime.toInt() * 60;
-      // breakTimeNum = homeController.breakTime.toInt() * 60;
-      workingTime = workTimeNum;
-      breakTime = breakTimeNum;
-      remindTime = homeController.remindTime.toInt();
-      autoStart = homeController.autoStart;
-      totalPpoCount = localPpocusData[0]["totalPpoCount"] ?? 0;
-      totalPpoTime = localPpocusData[0]["totalPpoTime"] ?? 0;
-      timer = Timer(const Duration(seconds: 0), () {});
-
-      // print(todayDate.difference(DateTime(2023, 1, 3)).inDays);
-
-      // myBox.put("Daily", {
-      //   "data": [
-      //     {
-      //       "year": proccessedDate["year"],
-      //       "month": proccessedDate["month"],
-      //       "day": proccessedDate["day"],
-      //       "date": proccessedDate["date"],
-      //       "totalPpoCount": totalPpoCount,
-      //       "totalPpoTime": totalPpoTime
-      //     },
-      //   ]
-      // });
-
-      // print(myBox.get("Daily")["data"]);
+      localPpocusData = myBox.get("Daily")["data"];
+      print(localPpocusData);
     }
+    print(localPpocusData);
+
+    workTimeNum = homeController.workTime.toInt() * 60;
+    breakTimeNum = homeController.breakTime.toInt() * 60;
+    workTime = workTimeNum;
+    breakTime = breakTimeNum;
+    remindTime = homeController.remindTime.toInt();
+    autoStart = homeController.autoStart;
+    totalPpoCount = localPpocusData[lastIndex]["totalPpoCount"] ?? 0;
+    totalPpoTime = localPpocusData[lastIndex]["totalPpoTime"] ?? 0;
 
     super.initState();
   }
@@ -123,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void onTickWorkingTimer(Timer timer) {
-    if (workingTime == 0) {
+    if (workTime == 0) {
       if (isWorking) {
         totalPpoCount = totalPpoCount + 1;
         totalPpoTime = totalPpoTime + workTimeNum;
@@ -144,10 +164,10 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     } else {
       setState(() {
-        workingTime = workingTime - 1;
+        workTime = workTime - 1;
       });
     }
-    if (workingTime == remindTime * 60 && isRemindTimerOn) {
+    if (workTime == remindTime * 60 && isRemindTimerOn) {
       isReminding = true;
       Vibration.vibrate(duration: 750);
       Timer(const Duration(seconds: 5), () {
@@ -161,7 +181,7 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         isWorking = true;
         isTakingBreak = false;
-        workingTime = workTimeNum;
+        workTime = workTimeNum;
         if (!autoStart) {
           isTimerRunning = false;
         }
@@ -215,7 +235,7 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       isTimerRunning = false;
       isWorking = false;
-      workingTime = workTimeNum;
+      workTime = workTimeNum;
     });
     timer.cancel();
   }
@@ -257,7 +277,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             if (isWorking || (!isWorking && !isTakingBreak))
               Text(
-                formatTime(workingTime),
+                formatTime(workTime),
                 style: const TextStyle(
                   fontSize: 60,
                 ),
