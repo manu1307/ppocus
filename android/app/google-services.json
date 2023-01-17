@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "818411204421",
+    "project_id": "ppocus-e6a62",
+    "storage_bucket": "ppocus-e6a62.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:818411204421:android:248193e5f788451377982c",
+        "android_client_info": {
+          "package_name": "com.example.ppocus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "818411204421-ihdkhl4i4jj7hvc1ndvij06jvpao2r24.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_-rd2Jgt1oXuSWBBVCpaRy0azwI0VHjU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "818411204421-ihdkhl4i4jj7hvc1ndvij06jvpao2r24.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "818411204421-ppcfp06r5ujvsrfbiu4hj2574phvfegt.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.ppocus"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

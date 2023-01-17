@@ -5,6 +5,18 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:ppocus/screens/home_screen.dart';
 import 'package:ppocus/screens/record_screen.dart';
 import 'package:ppocus/screens/settings_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+
+FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+
+var blackFontcolor = const Color(0xff2d2d2d);
+var selectedColor = const Color(0xffAA1945);
+var backgroundColor = const Color(0xffF9F1F0);
+var appBarBackgroundColor = const Color(0xffFADCD9);
+var boxColor = const Color(0xffF79489);
+var inactiveColor = const Color(0xffF8AFA6);
 
 class Controller extends GetxController {
   var count = 0.obs;
@@ -16,9 +28,13 @@ class Controller extends GetxController {
 }
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   await Hive.initFlutter();
   await Hive.openBox("timeRecord_test_box");
-  WidgetsFlutterBinding.ensureInitialized();
+
   runApp(const App());
 }
 
@@ -31,21 +47,28 @@ class App extends StatelessWidget {
     return MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
-          appBarTheme: const AppBarTheme(
-            backgroundColor: Color(0xff175873),
+          appBarTheme: AppBarTheme(
+            backgroundColor: appBarBackgroundColor,
           ),
-          scaffoldBackgroundColor: const Color(0xff2B7C85),
+          scaffoldBackgroundColor: backgroundColor,
           textTheme: TextTheme(
             bodyMedium: TextStyle(
-              color: Colors.white,
+              color: blackFontcolor,
               fontFamily: GoogleFonts.gothicA1().fontFamily,
               fontSize: 16,
             ),
           ),
           sliderTheme: SliderThemeData(
             overlayShape: SliderComponentShape.noOverlay,
-            activeTickMarkColor: Colors.red,
-            thumbColor: Colors.red,
+            thumbColor: selectedColor,
+            activeTrackColor: selectedColor,
+            inactiveTrackColor: inactiveColor,
+          ),
+          switchTheme: SwitchThemeData(
+            thumbColor: MaterialStateProperty.resolveWith((states) =>
+                states.contains(MaterialState.selected) ? selectedColor : null),
+            trackColor: MaterialStateProperty.resolveWith((states) =>
+                states.contains(MaterialState.selected) ? inactiveColor : null),
           ),
           primarySwatch: Colors.blue,
         ),
@@ -81,13 +104,17 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Center(
-          child: Text(_screenOptions.elementAt(_selectedIndex)["title"]),
+          child: Text(
+            _screenOptions.elementAt(_selectedIndex)["title"],
+            style: TextStyle(color: blackFontcolor),
+          ),
         ),
       ),
       body: SafeArea(
         child: _screenOptions.elementAt(_selectedIndex)["screen"],
       ),
       bottomNavigationBar: BottomNavigationBar(
+        selectedIconTheme: IconThemeData(color: selectedColor),
         items: const [
           BottomNavigationBarItem(
             icon: Icon(
