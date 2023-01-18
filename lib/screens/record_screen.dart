@@ -24,8 +24,7 @@ class _RecordScreenState extends State<RecordScreen> {
   @override
   void initState() {
     localPpocusData = myBox.get("Daily")["data"];
-    Map<String, dynamic> todayPpocusDataLastItem =
-        localPpocusData[localPpocusData.length - 1];
+    Map todayPpocusDataLastItem = localPpocusData[localPpocusData.length - 1];
 
     todayPpoCount = todayPpocusDataLastItem['totalPpoCount'];
     todayPpoTime = todayPpocusDataLastItem['totalPpoTime'];
