@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.ppocus">
+    package="com.jasonsc.first_app">
    <application
         android:label="ppocus"
         android:name="${applicationName}"

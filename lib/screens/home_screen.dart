@@ -43,42 +43,42 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     Wakelock.toggle(enable: homeController.wakeLockEnable);
 
-    // myBox.put("Daily", {
-    //   "data": [
-    //     {
-    //       "year": 2023,
-    //       "month": 1,
-    //       "day": 13,
-    //       "date": DateTime(2023, 1, 13),
-    //       "totalPpoCount": 3,
-    //       "totalPpoTime": 180,
-    //     },
-    //     {
-    //       "year": 2023,
-    //       "month": 1,
-    //       "day": 14,
-    //       "date": DateTime(2023, 1, 14),
-    //       "totalPpoCount": 5,
-    //       "totalPpoTime": 155,
-    //     },
-    //     {
-    //       "year": 2023,
-    //       "month": 1,
-    //       "day": 15,
-    //       "date": DateTime(2023, 1, 15),
-    //       "totalPpoCount": 4,
-    //       "totalPpoTime": 210,
-    //     },
-    //     {
-    //       "year": 2023,
-    //       "month": 1,
-    //       "day": 16,
-    //       "date": DateTime(2023, 1, 16),
-    //       "totalPpoCount": 8,
-    //       "totalPpoTime": 220,
-    //     },
-    //   ]
-    // });
+    myBox.put("Daily", {
+      "data": [
+        {
+          "year": 2023,
+          "month": 1,
+          "day": 13,
+          "date": DateTime(2023, 1, 13),
+          "totalPpoCount": 3,
+          "totalPpoTime": 180,
+        },
+        {
+          "year": 2023,
+          "month": 1,
+          "day": 14,
+          "date": DateTime(2023, 1, 14),
+          "totalPpoCount": 5,
+          "totalPpoTime": 155,
+        },
+        {
+          "year": 2023,
+          "month": 1,
+          "day": 15,
+          "date": DateTime(2023, 1, 15),
+          "totalPpoCount": 4,
+          "totalPpoTime": 210,
+        },
+        {
+          "year": 2023,
+          "month": 1,
+          "day": 16,
+          "date": DateTime(2023, 1, 16),
+          "totalPpoCount": 8,
+          "totalPpoTime": 220,
+        },
+      ]
+    });
 
     List localPpocusData = myBox.get("Daily")["data"];
 

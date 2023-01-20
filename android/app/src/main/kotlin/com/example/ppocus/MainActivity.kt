@@ -1,4 +1,4 @@
-package com.example.ppocus
+package com.jasonsc.first_app
 
 import io.flutter.embedding.android.FlutterActivity
 

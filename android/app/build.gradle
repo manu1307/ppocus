@@ -32,9 +32,9 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
    }
 
    android {
-    compileSdkVersion 33
-    buildToolsVersion "32"
-    ndkVersion flutter.ndkVersion
+        compileSdkVersion 33
+                // buildToolsVersion "33"
+        ndkVersion flutter.ndkVersion
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -51,12 +51,12 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.example.ppocus"
+        applicationId "com.jasonsc.first_app"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-build-configuration.
-        minSdkVersion 19
-        targetSdkVersion 23
-        versionCode 1
+        minSdk 24
+        targetSdk 31
+        versionCode 4
         versionName "1.0"
         multiDexEnabled true 
     }
@@ -74,9 +74,6 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
            signingConfig signingConfigs.release
 
             minifyEnabled true
-            useProguard true
-
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
        }
    }
 }
