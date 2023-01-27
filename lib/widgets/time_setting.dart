@@ -43,11 +43,13 @@ class _TimeSettingState extends State<TimeSetting> {
                     max: 60,
                     divisions: 12,
                     onChanged: (value) {
-                      setState(() {
-                        _workTimeSliderValue = value;
-                      });
-                      timeController.workTime =
-                          RxInt(_workTimeSliderValue.toInt());
+                      if (value >= 5) {
+                        setState(() {
+                          _workTimeSliderValue = value;
+                        });
+                        timeController.workTime =
+                            RxInt(_workTimeSliderValue.toInt());
+                      }
                     }),
               ),
               Padding(
@@ -70,11 +72,13 @@ class _TimeSettingState extends State<TimeSetting> {
                     max: 30,
                     divisions: 6,
                     onChanged: (value) {
-                      setState(() {
-                        _breakTimeSliderValue = value;
-                      });
-                      timeController.breakTime =
-                          RxInt(_breakTimeSliderValue.toInt());
+                      if (value >= 5) {
+                        setState(() {
+                          _breakTimeSliderValue = value;
+                        });
+                        timeController.breakTime =
+                            RxInt(_breakTimeSliderValue.toInt());
+                      }
                     }),
               ),
               Padding(
@@ -97,11 +101,13 @@ class _TimeSettingState extends State<TimeSetting> {
                     max: 30,
                     divisions: 6,
                     onChanged: (value) {
-                      setState(() {
-                        _remindTimeSliderValue = value;
-                      });
-                      timeController.remindTime =
-                          RxInt(_remindTimeSliderValue.toInt());
+                      if (value >= 5) {
+                        setState(() {
+                          _remindTimeSliderValue = value;
+                        });
+                        timeController.remindTime =
+                            RxInt(_remindTimeSliderValue.toInt());
+                      }
                     }),
               ),
             ],

@@ -43,8 +43,8 @@ class TodayRecord extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("집중 횟수 : $todayPpoCount"),
-                  Text("집중 시간 : $todayPpoTime"),
+                  Text("뽀 횟수 : $todayPpoCount"),
+                  Text("뽀 시간 : $todayPpoTime"),
                 ],
               )
             ],

@@ -43,51 +43,18 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     Wakelock.toggle(enable: homeController.wakeLockEnable);
 
-    myBox.put("Daily", {
-      "data": [
-        {
-          "year": 2023,
-          "month": 1,
-          "day": 13,
-          "date": DateTime(2023, 1, 13),
-          "totalPpoCount": 3,
-          "totalPpoTime": 180,
-        },
-        {
-          "year": 2023,
-          "month": 1,
-          "day": 14,
-          "date": DateTime(2023, 1, 14),
-          "totalPpoCount": 5,
-          "totalPpoTime": 155,
-        },
-        {
-          "year": 2023,
-          "month": 1,
-          "day": 15,
-          "date": DateTime(2023, 1, 15),
-          "totalPpoCount": 4,
-          "totalPpoTime": 210,
-        },
-        {
-          "year": 2023,
-          "month": 1,
-          "day": 16,
-          "date": DateTime(2023, 1, 16),
-          "totalPpoCount": 8,
-          "totalPpoTime": 220,
-        },
-      ]
-    });
-
+    if (myBox.get("Daily") == null) {
+      myBox.put("Daily", {"data": []});
+    }
     List localPpocusData = myBox.get("Daily")["data"];
 
-    int lastIndex = localPpocusData.length - 1;
-    if (!checkToday(
-        localPpocusData[lastIndex]["year"],
-        localPpocusData[lastIndex]["month"],
-        localPpocusData[lastIndex]["day"])) {
-      print("date changed");
+    int lastIndex = localPpocusData.isNotEmpty ? localPpocusData.length - 1 : 0;
+    if (localPpocusData.isEmpty ||
+        !checkToday(
+            localPpocusData[lastIndex]["year"],
+            localPpocusData[lastIndex]["month"],
+            localPpocusData[lastIndex]["day"])) {
+      //   print("date changed");
       myBox.put("Daily", {
         "data": [
           ...localPpocusData,
@@ -138,10 +105,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   String formatTime(int time) {
     var timeDuration = Duration(seconds: time).toString();
-    var hourMinuteSecond = timeDuration.split(".")[0].split(":");
-    var minute = hourMinuteSecond[1];
-    var second = hourMinuteSecond[2];
-    return "$minute : $second";
+    List<String> hourMinuteSecond = timeDuration.split(".")[0].split(":");
+    String minute = hourMinuteSecond[1];
+    String second = hourMinuteSecond[2];
+    String result =
+        minute == "00" && second == "00" ? "60 : 00" : "$minute : $second";
+    return result;
   }
 
   void onTickWorkingTimer(Timer timer) {

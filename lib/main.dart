@@ -63,6 +63,8 @@ class App extends StatelessWidget {
             thumbColor: selectedColor,
             activeTrackColor: selectedColor,
             inactiveTrackColor: inactiveColor,
+            activeTickMarkColor: selectedColor,
+            inactiveTickMarkColor: inactiveColor,
           ),
           switchTheme: SwitchThemeData(
             thumbColor: MaterialStateProperty.resolveWith((states) =>
@@ -72,6 +74,7 @@ class App extends StatelessWidget {
           ),
           primarySwatch: Colors.blue,
         ),
+        debugShowCheckedModeBanner: false,
         home: const HomePage());
   }
 }
@@ -92,8 +95,6 @@ class _HomePageState extends State<HomePage> {
   ];
 
   void _onItemTapped(int index) {
-    // print(_selectedIndex);
-    print(index);
     setState(() {
       _selectedIndex = index;
     });

@@ -12,7 +12,7 @@ class SettingScreen extends StatefulWidget {
 
 class _SettingScreenState extends State<SettingScreen> {
   final Controller settingController = Get.find();
-  final double _currentSliderValue = 20;
+  final double _currentSliderValue = 25;
 
   late bool autoStartSetting;
   late bool wakeLockEnable;

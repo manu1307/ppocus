@@ -32,7 +32,7 @@ class _RecordScreenState extends State<RecordScreen> {
     numberOfColumntoShow =
         localPpocusData.length > 7 ? 7 : localPpocusData.length;
 
-    print(todayDate["year"]);
+    // print(todayDate["year"]);
     super.initState();
   }
 
@@ -73,11 +73,11 @@ class _RecordScreenState extends State<RecordScreen> {
                     )),
                     DataColumn(
                         label: Text(
-                      '집중 횟수',
+                      '뽀 횟수',
                     )),
                     DataColumn(
                         label: Text(
-                      '집중 시간',
+                      '뽀 시간',
                     ))
                   ],
                   rows: [
@@ -91,8 +91,12 @@ class _RecordScreenState extends State<RecordScreen> {
                             Text("${localPpocusData[i]["totalPpoCount"]}"),
                           ],
                         )),
-                        DataCell(
-                            Text("${localPpocusData[i]["totalPpoTime"]} 분")),
+                        DataCell(Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("${localPpocusData[i]["totalPpoTime"]} 분"),
+                          ],
+                        )),
                       ])
                   ])
             ],
